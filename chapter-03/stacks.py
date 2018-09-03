@@ -79,6 +79,51 @@ class TestStackMin(unittest.TestCase):
         s.pop()
         self.assertEqual(5, s.min())
 
+class SetOfStacks:
+    def __init__(self, limit):
+        self.stacks = [deque()]
+        self.limit = limit
+        self.s_index = 0
+
+    def push(self, data):
+        if len(self.stacks[self.s_index]) == self.limit:
+            self.stacks.append(deque())
+            self.s_index += 1
+        self.stacks[self.s_index].append(data)
+
+    def pop(self):
+        if len(self.stacks[self.s_index]) == 0:
+            self.s_index -= 1
+            self.stacks.pop()
+        return self.stacks[self.s_index].pop()
+
+    def pop_at(self, stack_index):
+        return self.stacks[stack_index].pop()
+
+
+class TestSetOfStacks(unittest.TestCase):
+    def test_set_of_stacks(self):
+        s = SetOfStacks(2)
+        s.push(5)
+        s.push(1)
+        s.push(2)
+
+        self.assertEqual(2, s.pop())
+        self.assertEqual(1, s.pop())
+        self.assertEqual(5, s.pop())
+
+    def test_set_of_stacks_pop_at_index(self):
+        s = SetOfStacks(2)
+        s.push(5)
+        s.push(1)
+        s.push(2)
+
+        self.assertEqual(1, s.pop_at(0))
+        self.assertEqual(2, s.pop())
+        self.assertEqual(5, s.pop())
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
