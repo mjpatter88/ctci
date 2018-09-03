@@ -112,6 +112,39 @@ def add_backwards(list1, list2):
         new.add(remainder)
     return new
 
+def add_forwards(list1, list2):
+    if list1 is None or list2 is None:
+        assert False
+    s1 = []
+    s2 = []
+    s_sum = []
+    cur = list1.head
+    while cur:
+        s1.append(cur.data)
+        cur = cur.nxt
+    cur = list2.head
+    while cur:
+        s2.append(cur.data)
+        cur = cur.nxt
+
+    remainder = 0
+    while s1 or s2:
+        s = 0
+        if s1:
+            s += s1.pop()
+        if s2:
+            s += s2.pop()
+        s += remainder
+        remainder = s // 10
+        s_sum.append(s % 10)
+    if remainder:
+        s_sum.append(remainder)
+    new = List()
+    while s_sum:
+        new.add(s_sum.pop())
+    return new
+
+
 
 import unittest
 class TestList(unittest.TestCase):
@@ -184,6 +217,19 @@ class TestList(unittest.TestCase):
         assert list_sum.get(1) == 1, list_sum.get(1)
         assert list_sum.get(2) == 9, list_sum.get(2)
 
+    def test_add_forwards(self):
+        list1 = List()
+        list1.add(6)
+        list1.add(1)
+        list1.add(7)
+        list2 = List()
+        list2.add(2)
+        list2.add(9)
+        list2.add(5)
+        list_sum = add_forwards(list1, list2)
+        assert list_sum.get(0) == 9, list_sum.get(0)
+        assert list_sum.get(1) == 1, list_sum.get(1)
+        assert list_sum.get(2) == 2, list_sum.get(2)
 
 
 if __name__ == '__main__':
