@@ -151,6 +151,36 @@ class TestTowers(unittest.TestCase):
         self.assertEqual(5, t.stacks[2].pop())
         self.assertEqual(6, t.stacks[2].pop())
 
+def sort_stack(s):
+    smaller = deque()
+    answer = deque()
+    while s:
+        cur = s.pop()
+        while answer and answer[-1] < cur:
+            smaller.append(answer.pop())
+        answer.append(cur)
+        while smaller:
+            answer.append(smaller.pop())
+
+    return answer
+
+
+class TestSortStack(unittest.TestCase):
+    def test_sort_stack(self):
+        s = deque([10,9,5,7,1,3,4,2,6,8])
+        so = sort_stack(s)
+
+        self.assertEqual(1, so.pop())
+        self.assertEqual(2, so.pop())
+        self.assertEqual(3, so.pop())
+        self.assertEqual(4, so.pop())
+        self.assertEqual(5, so.pop())
+        self.assertEqual(6, so.pop())
+        self.assertEqual(7, so.pop())
+        self.assertEqual(8, so.pop())
+        self.assertEqual(9, so.pop())
+        self.assertEqual(10, so.pop())
+
 
 
 if __name__ == '__main__':
