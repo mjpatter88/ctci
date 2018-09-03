@@ -90,6 +90,29 @@ class List:
         node.data = node.nxt.data
         node.nxt = node.nxt.nxt
 
+def add_backwards(list1, list2):
+    if list1 is None or list2 is None:
+        assert False
+    new = List()
+    l1 = list1.head
+    l2 = list2.head
+    remainder = 0
+    while l1 or l2:
+        s = 0
+        if l1:
+            s += l1.data
+            l1 = l1.nxt
+        if l2:
+            s += l2.data
+            l2 = l2.nxt
+        s += remainder
+        remainder = s // 10
+        new.add(s % 10)
+    if remainder:
+        new.add(remainder)
+    return new
+
+
 import unittest
 class TestList(unittest.TestCase):
     def test_list_add_then_get(self):
@@ -146,6 +169,22 @@ class TestList(unittest.TestCase):
         l.delete_node(n)
         assert l.get(0) == 1, l.get(0)
         assert l.get(1) == 3, l.get(1)
+
+    def test_add_backwards(self):
+        list1 = List()
+        list1.add(7)
+        list1.add(1)
+        list1.add(6)
+        list2 = List()
+        list2.add(5)
+        list2.add(9)
+        list2.add(2)
+        list_sum = add_backwards(list1, list2)
+        assert list_sum.get(0) == 2, list_sum.get(0)
+        assert list_sum.get(1) == 1, list_sum.get(1)
+        assert list_sum.get(2) == 9, list_sum.get(2)
+
+
 
 if __name__ == '__main__':
     unittest.main()
