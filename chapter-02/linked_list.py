@@ -1,4 +1,6 @@
 from collections import defaultdict
+from collections import deque
+
 class Node:
     def __init__(self, data):
         self.data = data
@@ -90,6 +92,19 @@ class List:
         node.data = node.nxt.data
         node.nxt = node.nxt.nxt
 
+    def is_pal(self):
+        s = []
+        q = deque()
+        cur = self.head
+        while cur:
+            s.append(cur.data)
+            q.append(cur.data)
+            cur = cur.nxt
+        while s:
+            if s.pop() != q.popleft():
+                return False
+        return True
+
 def add_backwards(list1, list2):
     if list1 is None or list2 is None:
         assert False
@@ -144,7 +159,15 @@ def add_forwards(list1, list2):
         new.add(s_sum.pop())
     return new
 
-
+def get_loop_start(node):
+    s = set()
+    cur = node
+    while cur:
+        if cur.data in s:
+            return cur.data
+        s.add(cur.data)
+        cur = cur.nxt
+    return False
 
 import unittest
 class TestList(unittest.TestCase):
@@ -230,6 +253,43 @@ class TestList(unittest.TestCase):
         assert list_sum.get(0) == 9, list_sum.get(0)
         assert list_sum.get(1) == 1, list_sum.get(1)
         assert list_sum.get(2) == 2, list_sum.get(2)
+
+    def test_get_loop(self):
+        list1 = List()
+        list1.add('a')
+        list1.add('b')
+        c = list1.add('c')
+        list1.add('d')
+        n = list1.add('e')
+        n.nxt = c
+
+        assert get_loop_start(list1.head) == 'c', get_loop_start(list1.head)
+
+    def test_get_loop_false(self):
+        list1 = List()
+        list1.add('a')
+        list1.add('b')
+        list1.add('c')
+
+        assert get_loop_start(list1.head) == False, get_loop_start(list1.head)
+
+    def test_is_pal(self):
+        list1 = List()
+        list1.add('a')
+        list1.add('b')
+        list1.add('c')
+        list1.add('b')
+        list1.add('a')
+
+        assert list1.is_pal() == True
+
+    def test_is_pal_false(self):
+        list1 = List()
+        list1.add('a')
+        list1.add('b')
+        list1.add('c')
+
+        assert list1.is_pal() == False
 
 
 if __name__ == '__main__':
