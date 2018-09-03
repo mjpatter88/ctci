@@ -65,6 +65,23 @@ class List:
                 prev = cur
             cur = cur.nxt
 
+    def get_from_end(self, k):
+        if not self.head:
+            return None
+        gap = 0
+        cur = self.head
+        run = self.head
+        while run.nxt:
+            run = run.nxt
+            if gap >= k:
+                cur = cur.nxt
+            else:
+                gap += 1
+        if gap == k:
+            return cur.data
+        else:
+            return None
+
 import unittest
 class TestList(unittest.TestCase):
     def test_list_add_then_get(self):
@@ -98,5 +115,20 @@ class TestList(unittest.TestCase):
         assert l.get(1) == 2, l.get(1)
         assert l.get(2) == 3, l.get(2)
         assert l.get(3) == 5, l.get(3)
+
+    def test_list_from_end(self):
+        l = List()
+        l.add(1)
+        l.add(2)
+        l.add(3)
+        l.add(1)
+        l.add(2)
+        l.add(5)
+        assert l.get_from_end(0) == 5, l.get_from_end(0)
+        assert l.get_from_end(1) == 2, l.get_from_end(1)
+        assert l.get_from_end(2) == 1, l.get_from_end(2)
+        assert l.get_from_end(5) == 1, l.get_from_end(5)
+        assert l.get_from_end(6) == None, l.get_from_end(6)
+
 if __name__ == '__main__':
     unittest.main()
