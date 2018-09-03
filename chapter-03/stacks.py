@@ -122,6 +122,34 @@ class TestSetOfStacks(unittest.TestCase):
         self.assertEqual(2, s.pop())
         self.assertEqual(5, s.pop())
 
+class Towers:
+    def __init__(self):
+        self.stacks = [deque([6,5,4,3,2,1]), deque(), deque()]
+
+    def solve(self):
+        self.move(6, 0, 2)
+
+    def move(self, amount, start, end):
+        if amount == 1:
+            self.stacks[end].append(self.stacks[start].pop())
+        else:
+            step =({0,1,2} - {start, end}).pop()
+            self.move(amount-1, start, step)
+            self.move(1, start, end)
+            self.move(amount-1, step, end)
+
+
+class TestTowers(unittest.TestCase):
+    def test_towers(self):
+        t = Towers()
+        t.solve()
+
+        self.assertEqual(1, t.stacks[2].pop())
+        self.assertEqual(2, t.stacks[2].pop())
+        self.assertEqual(3, t.stacks[2].pop())
+        self.assertEqual(4, t.stacks[2].pop())
+        self.assertEqual(5, t.stacks[2].pop())
+        self.assertEqual(6, t.stacks[2].pop())
 
 
 
