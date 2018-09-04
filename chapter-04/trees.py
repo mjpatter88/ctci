@@ -34,6 +34,17 @@ class BinaryTree:
         l.append(node.data)
         return l
 
+def balanced(node):
+    # returns depth or -1 if not balanced
+    l = 0
+    r = 0
+    if node.left:
+        l = balanced(node.left)
+    if node.right:
+        r = balanced(node.right)
+    if l == -1 or r == -1 or abs(l-r) > 1:
+        return -1
+    return max(l, r) + 1
 
 
 import unittest
@@ -59,6 +70,26 @@ class TestBinaryTree(unittest.TestCase):
 
     def test_binary_tree_post_order(self):
         self.assertEqual([4, 5, 2, 3, 1], self.t.post_order(self.t.head))
+
+    def test_balanced(self):
+        n1 = TreeNode(1)
+        n2 = TreeNode(2)
+        n3 = TreeNode(3)
+        n4 = TreeNode(3)
+        n5 = TreeNode(3)
+        n1.left = n2
+        n1.right = n3
+        n2.left = n4
+        n3.right = n5
+        self.assertEqual(balanced(n1), 3)
+
+    def test_balanced_false(self):
+        n1 = TreeNode(1)
+        n2 = TreeNode(2)
+        n3 = TreeNode(3)
+        n1.left = n2
+        n2.left = n3
+        self.assertEqual(balanced(n1), -1)
 
 if __name__ == '__main__':
     unittest.main()
