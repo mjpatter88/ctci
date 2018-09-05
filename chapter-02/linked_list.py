@@ -105,6 +105,37 @@ class List:
                 return False
         return True
 
+
+    def partition(self, x):
+        if self.head is None:
+            assert False
+
+        first = None
+        first_start = None
+        last = None
+        last_start = None
+        cur = self.head
+        while cur is not None:
+            if cur.data < x:
+                if first is None:
+                    first = cur
+                    first_start = first
+                else:
+                    first.nxt = cur
+                    first = cur
+            else:
+                if last is None:
+                    last = cur
+                    last_start = last
+                else:
+                    last.nxt = cur
+                    last = cur
+            cur = cur.nxt
+
+        first.nxt = last_start
+        last.nxt = None
+        self.head = first_start
+
 def add_backwards(list1, list2):
     if list1 is None or list2 is None:
         assert False
@@ -217,7 +248,7 @@ class TestList(unittest.TestCase):
         assert l.get_from_end(5) == 1, l.get_from_end(5)
         assert l.get_from_end(6) == None, l.get_from_end(6)
 
-    def test_list_from_end(self):
+    def test_list_delete_node(self):
         l = List()
         l.add(1)
         n = l.add(2)
@@ -291,6 +322,21 @@ class TestList(unittest.TestCase):
 
         assert list1.is_pal() == False
 
+    def test_list_partition(self):
+        l = List()
+        l.add(1)
+        l.add(2)
+        l.add(3)
+        l.add(1)
+        l.add(2)
+        l.add(5)
+        l.partition(3)
+        assert l.get(0) == 1, l.get(0)
+        assert l.get(1) == 2, l.get(1)
+        assert l.get(2) == 1, l.get(2)
+        assert l.get(3) == 2, l.get(3)
+        assert l.get(4) == 3, l.get(4)
+        assert l.get(5) == 5, l.get(5)
 
 if __name__ == '__main__':
     unittest.main()
