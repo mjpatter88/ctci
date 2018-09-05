@@ -46,6 +46,16 @@ def balanced(node):
         return -1
     return max(l, r) + 1
 
+def get_bst(arr):
+    if not arr:
+        return None
+    if len(arr) == 1:
+        return TreeNode(arr[0])
+    mid = len(arr) // 2
+    head = TreeNode(arr[mid])
+    head.left = get_bst(arr[:mid])
+    head.right = get_bst(arr[mid:])
+    return head
 
 import unittest
 class TestBinaryTree(unittest.TestCase):
@@ -90,6 +100,14 @@ class TestBinaryTree(unittest.TestCase):
         n1.left = n2
         n2.left = n3
         self.assertEqual(balanced(n1), -1)
+
+    def test_get_bst(self):
+        arr = [1,2,3,4,5,6,7,8,9,10]
+        head = get_bst(arr)
+
+        self.assertEqual(head.data, 6, head.data)
+        self.assertEqual(head.right.data, 8, head.data)
+        self.assertEqual(head.left.data, 3, head.data)
 
 if __name__ == '__main__':
     unittest.main()
