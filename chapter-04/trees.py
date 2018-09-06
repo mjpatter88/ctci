@@ -57,6 +57,37 @@ def get_bst(arr):
     head.right = get_bst(arr[mid:])
     return head
 
+from collections import deque
+class LLNode:
+    def __init__(self, data):
+        self.nxt = None
+        self.data = data
+
+def bst_to_lls(bst):
+    import math
+
+    lls = []
+    q = deque()
+    cur_ll_index = -1
+    last_val = math.inf
+    q.append(bst)
+    while q:
+        n = q.popleft()
+        if n.data < last_val:
+            cur_ll_index +=1
+            lls.append(LLNode(n.data))
+
+        else:
+            lls[cur_ll_index].nxt = LLNode(n.data)
+
+        last_val = n.data
+        if n.left:
+            q.append(n.left)
+        if n.right:
+            q.append(n.right)
+
+    return lls
+
 import unittest
 class TestBinaryTree(unittest.TestCase):
     def setUp(self):
@@ -108,6 +139,23 @@ class TestBinaryTree(unittest.TestCase):
         self.assertEqual(head.data, 6, head.data)
         self.assertEqual(head.right.data, 8, head.data)
         self.assertEqual(head.left.data, 3, head.data)
+
+    def test_bst_to_lls(self):
+        n1 = TreeNode(1)
+        n2 = TreeNode(2)
+        n3 = TreeNode(3)
+        n4 = TreeNode(4)
+        n5 = TreeNode(5)
+        n3.left = n2
+        n2.left = n1
+        n3.right = n4
+        n4.right = n5
+        lls = bst_to_lls(n3)
+        self.assertEqual(lls[0].data, 3)
+        self.assertEqual(lls[1].data, 2)
+        self.assertEqual(lls[1].nxt.data, 4)
+        self.assertEqual(lls[2].data, 1)
+        self.assertEqual(lls[2].nxt.data, 5)
 
 if __name__ == '__main__':
     unittest.main()
